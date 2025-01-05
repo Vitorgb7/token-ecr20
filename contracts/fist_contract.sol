@@ -48,6 +48,7 @@ contract fist_contract {
             require(balanceOf(_from) >= _value, "saldo insuficiente");
             _balances[_from] -= _value;
             _balances[_to] += _value;
+            _allowances[_from][msg.sender] -= _value;
             emit Transfer(_from, _to, _value);
             return true;
     }
@@ -56,5 +57,9 @@ contract fist_contract {
         _allowances[msg.sender][_spender] = _value;
         emit Approval(msg.sender, _spender, _value);
         return true;
+    }
+
+    function allowance(address _owner, address _spender) public view returns (uint256){
+        return _allowances[_owner][_spender];
     }
 }
