@@ -3,8 +3,11 @@ pragma solidity ^0.8.24;
 contract fist_contract {
     
     mapping(address => uint256) private _balances;
+    // dono dos fundos => (autorizado => quantia autorizada)
+    mapping(address => mapping(address => uint256)) private _allowances;
 
     event Transfer(address indexed _from, address indexed _to, uint256 _value);
+    event Approval(address indexed _owner, address indexed _spender, uint256 _value);
 
     constructor(){
         _balances[msg.sender] = totalSupply();
@@ -41,6 +44,7 @@ contract fist_contract {
     }
 
     function transferFrom(address _from, address _to, uint256 _value) public returns (bool){
+            require(_allowances[_from][msg.sender] >= _value, " permissao insuficiente");
             require(balanceOf(_from) >= _value, "saldo insuficiente");
             _balances[_from] -= _value;
             _balances[_to] += _value;
@@ -48,4 +52,9 @@ contract fist_contract {
             return true;
     }
 
+    function approve(address _spender, uint256 _value) public returns (bool){
+        _allowances[msg.sender][_spender] = _value;
+        emit Approval(msg.sender, _spender, _value);
+        return true;
+    }
 }
