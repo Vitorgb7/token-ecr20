@@ -4,6 +4,8 @@ contract fist_contract {
     
     mapping(address => uint256) private _balances;
 
+    event Transfer(address indexed _from, address indexed _to, uint256 _value);
+
     constructor(){
         _balances[msg.sender] = totalSupply();
     }
@@ -27,6 +29,15 @@ contract fist_contract {
     // função saldo
     function balanceOf(address _owner) public view returns (uint256) {
         return _balances[_owner];
+    }
+
+    function transfer(address _to, uint256 _value) public returns (bool){
+        require(balanceOf(msg.sender) >= _value, "saldo insuficiente");
+
+        _balances[msg.sender] -= _value;
+        _balances[_to] += _value;
+        emit Transfer(msg.sender, _to, _value);
+        return true;
     }
 
 }
