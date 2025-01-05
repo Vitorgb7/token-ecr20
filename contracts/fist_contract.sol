@@ -40,4 +40,12 @@ contract fist_contract {
         return true;
     }
 
+    function transferFrom(address _from, address _to, uint256 _value) public returns (bool){
+            require(balanceOf(_from) >= _value, "saldo insuficiente");
+            _balances[_from] -= _value;
+            _balances[_to] += _value;
+            emit Transfer(_from, _to, _value);
+            return true;
+    }
+
 }
